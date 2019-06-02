@@ -25,11 +25,6 @@ jobs: # a collection of steps
 
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: server/coverage
-
-      - store_artifacts: # special step to save test results as as artifact
-          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: server/coverage/mocha-test.html
-          prefix: test
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: server/coverage/index.html
           prefix: test
