@@ -1,0 +1,607 @@
+swagger: "2.0"
+info:
+  description: "REST API with Swagger doc"
+  version: "1.0.1"
+  title: "REST - Swagger Babelomics"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "APP Support"
+    url: "https://github.com/alemarcha/UMS"
+    email: "babelomics6@clinbioinfosspa.es"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+basePath: "/api"
+tags:
+  - name: "auth"
+    description: "Auth endpoints"
+schemes:
+  - "http"
+paths:
+  /users/search:
+    get:
+      description: "Searching for users active with applied filters "
+      tags:
+        - "users"
+      produces:
+        - application/json
+      parameters:
+        - name: email
+          in: query
+          description: user email to search. It will search for every user that contains email parameter.
+          type: string
+        - name: name
+          in: query
+          description: first name to search. It will search for every user that contains first name parameter.
+          type: string
+        - name: lastName
+          in: query
+          description: last name to search. It will search for every user that contains last name parameter.
+          type: string
+        - name: roles
+          in: query
+          description: roles separated by comma which it will search for every user that contains at least one of them
+          type: string
+      responses:
+        "200":
+          description: "users response"
+  /users/register:
+    post:
+      description: Register user account to the application.
+      tags:
+        - "users"
+      consumes:
+        - application/json
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: Register user
+          description: User info in order to register.
+          schema:
+            type: object
+            required:
+              - email
+              - password
+              - firstName
+              - lastName
+              - roles
+            properties:
+              email:
+                type: string
+                example: jack@email.com
+                description: User's email.
+              password:
+                type: string
+                description: User's password.
+                example: passw
+                format: "password"
+              firstName:
+                type: string
+                description: User's first name.
+                example: Jack
+              lastName:
+                type: string
+                description: User's last name.
+                example: Jackson
+              roles:
+                type: array
+                example: ["admin_app1", "admin_app2"]
+                description: User's roles.
+      responses:
+        "200":
+          description: User add response
+        "201":
+          description: Created
+        "405":
+          description: Invalid input
+        "409":
+          description: Unauthorized petition, maybe already in use
+  /users/login:
+    post:
+      description: "Logs user into the system"
+      tags:
+        - "users"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "Login user"
+          description: "User info in order to login."
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+                format: "password"
+            example:
+              email: user@email.com
+              password: mypass
+      responses:
+        "200":
+          description: User login
+        "400":
+          description: Bad Request
+  /users/validJWT:
+    get:
+      description: "Check whether a JWT is valid or not."
+      tags:
+        - "users"
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: We need an JWT to authorized action. Schema value is following > JWT + Token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Ping response
+  /users/refreshJWT:
+    get:
+      description: "Refresh jwt if jwt valid is passed."
+      tags:
+        - "users"
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: We need an JWT to authorized action. Schema value is following > JWT + Token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Ping response
+  /users/{emailId}/update:
+    put:
+      description: "Update a user"
+      tags:
+        - "users"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: emailId
+          in: path
+          description: user email to fetch
+          required: true
+          type: string
+        - in: body
+          name: Update
+          description: User info in order to update.
+          schema:
+            type: object
+            required:
+              - email
+              - firstName
+              - lastName
+              - isActive
+              - roles
+            properties:
+              email:
+                type: string
+                example: jack@email.com
+                description: User's email.
+              firstName:
+                type: string
+                description: User's first name.
+                example: Jack
+              lastName:
+                type: string
+                description: User's last name.
+                example: Jackson
+              isActive:
+                type: boolean
+                example: true
+                description: Activation of the user.
+              roles:
+                type: array
+                example: ["admin"]
+                description: User's roles.
+      responses:
+        "200":
+          description: User update response
+        "201":
+          description: Updated
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /users/{emailId}/updatePassword:
+    put:
+      description: "Update password user"
+      tags:
+        - "users"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: emailId
+          in: path
+          description: user email to fetch
+          required: true
+          type: string
+        - in: body
+          name: Update
+          description: User info in order to update.
+          schema:
+            type: object
+            required:
+              - currentPassword
+              - newPassword
+              - repeatNewPassword
+            properties:
+              currentPassword:
+                type: string
+                description: Current User's password.
+                example: passw
+                format: "password"
+              newPassword:
+                type: string
+                description: New User's password.
+                example: passw
+                format: "password"
+              repeatNewPassword:
+                type: string
+                description: Repat new User's password.
+                example: passw
+                format: "password"
+      responses:
+        "200":
+          description: Password User update response
+        "201":
+          description: Updated
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /users/{emailId}/delete:
+    delete:
+      description: "Disable a user"
+      tags:
+        - "users"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: emailId
+          in: path
+          description: user email to fetch
+          required: true
+          type: string
+        - in: body
+          name: Disable
+          description: User info in order to disable.
+          schema:
+            type: object
+            required:
+              - email
+              - isActive
+            properties:
+              email:
+                type: string
+                example: jack@email.com
+                description: User's email.
+              isActive:
+                type: boolean
+                example: false
+                description: Disable the user.
+      responses:
+        "200":
+          description: User delete response
+        "201":
+          description: Deleted
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /roles/search:
+    get:
+      description: "Return the roles"
+      tags:
+        - "roles"
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: query
+          description: role name to search. It will search for every role that contains role name parameter.
+          type: string
+        - name: permissions
+          in: query
+          description: permissions separated by comma which it will search for every role that contains at least one of them
+          type: string
+      responses:
+        "200":
+          description: "roles response"
+  /roles/create:
+    post:
+      description: Create a new role
+      tags:
+        - "roles"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: Create a new Role
+          description: "Descriptive information about a role."
+          schema:
+            type: object
+            required:
+              - roleName
+              - permissions
+              - isActive
+            properties:
+              roleName:
+                type: string
+                example: adminApp1
+                description: Descriptive role name.
+              permissions:
+                type: array
+                example: ["createPosts", "modifyEntries", "read"]
+                description: Role's permissions.
+              isActive:
+                type: boolean
+                example: true
+                description: Activation of the role.
+      responses:
+        "200":
+          description: Role save response
+        "201":
+          description: Created
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /roles/{roleId}/update:
+    put:
+      tags:
+        - "roles"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: roleId
+          in: path
+          description: role to fetch
+          required: true
+          type: string
+        - in: body
+          name: Update role
+          description: Update role info.
+          schema:
+            type: object
+            required:
+              - roleName
+              - newRoleName
+              - isActive
+              - permissions
+            properties:
+              roleName:
+                type: string
+                example: adminCSVS
+                description: old role name.
+              newRoleName:
+                type: string
+                example: adminHipathia
+                description: new role name.
+              permissions:
+                type: array
+                example: ["create_tasks"]
+                description: Role's permissions.
+              isActive:
+                type: boolean
+                example: true
+                description: Activation of the role.
+      responses:
+        "200":
+          description: Role update response
+        "201":
+          description: Updated
+        "405":
+          description: Invalid input
+        "409":
+          description: Unauthorized petition, maybe already in use
+        default:
+          description: Unexpected error
+  /roles/{roleId}/delete:
+    delete:
+      tags:
+        - "roles"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: roleId
+          in: path
+          description: role to fetch
+          required: true
+          type: string
+        - in: body
+          name: Disable role
+          description: delete role info.
+          schema:
+            type: object
+            required:
+              - roleName
+              - isActive
+            properties:
+              roleName:
+                type: string
+                example: adminCSVS
+                description: role to disable.
+              isActive:
+                type: boolean
+                example: false
+                description: Disable the role.
+      responses:
+        "200":
+          description: Role delete response
+        "201":
+          description: deleted
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /permissions/search:
+    get:
+      description: Search permissions
+      tags:
+        - "permission"
+      produces:
+        - "application/json"
+      parameters:
+        - name: name
+          in: query
+          description: permission name to search. It will search for every permission that contains role name parameter.
+          type: string
+      responses:
+        "200":
+          description: Permissions response
+  /permissions/create:
+    post:
+      description: "Create permissions"
+      tags:
+        - "permission"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Create permission
+          in: body
+          description: "Create a new permission"
+          schema:
+            type: object
+            required:
+              - permissionName
+            properties:
+              permissionName:
+                type: string
+                example: editHipathia
+                description: Descriptive permission name.
+      responses:
+        "200":
+          description: Permission save response
+        "201":
+          description: Created
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /permissions/{permissionId}/update:
+    put:
+      tags:
+        - "permission"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: permissionId
+          in: path
+          description: permission to fetch
+          required: true
+          type: string
+        - in: body
+          name: Update permission
+          description: Update permission info.
+          schema:
+            type: object
+            required:
+              - permissionName
+              - newPermissionName
+              - isActive
+            properties:
+              permissionName:
+                type: string
+                example: editCSVS
+                description: Old permission name.
+              newPermissionName:
+                type: string
+                example: readCSVS
+                description: Update a permission name with a new one.
+              isActive:
+                type: boolean
+                example: true
+                description: Activation of the permission.
+      responses:
+        "200":
+          description: Permission save response
+        "201":
+          description: Created
+        "405":
+          description: Invalid input
+        "409":
+          description: Unauthorized petition, maybe already in use
+        default:
+          description: Unexpected error
+  /permissions/{permissionId}/delete:
+    delete:
+      tags:
+        - "permission"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: permissionId
+          in: path
+          description: permission to fetch
+          required: true
+          type: string
+        - in: body
+          name: Disable permission
+          description: delete permission.
+          schema:
+            type: object
+            required:
+              - permissionName
+              - isActive
+            properties:
+              permissionName:
+                type: string
+                example: adminCSVS
+              isActive:
+                type: boolean
+                example: false
+                description: Disable the permission.
+      responses:
+        "200":
+          description: Permission delete response
+        "201":
+          description: deleted
+        "405":
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /ping:
+    get:
+      description: "Ping Api Rest"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Ping response
+# securityDefinitions:
+#   token:
+#       type: http
+#       scheme: bearer
+#       in: header
+#       bearerFormat: JWT
