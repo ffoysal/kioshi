@@ -1,3 +1,5 @@
+process.env.ENVIRONMENT = 'test';
+
 let app = require('../server.js');
 //let config = require("./test_variables.js");
 let request = require('supertest')(app);
