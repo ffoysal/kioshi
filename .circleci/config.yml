@@ -6,7 +6,8 @@ jobs:
     docker:
       - image: circleci/node:8.11.4
     steps:
-      - checkout
+      - checkout:
+          path: ~/kioshi
       - run:
           name: Update npm
           command: "sudo npm install -g npm@latest"
@@ -24,7 +25,8 @@ jobs:
     docker:
       - image: circleci/node:8.11.4
     steps:
-      - checkout
+      - checkout:
+          path: ~/kioshi
       - run:
           name: Test
           command: npm test
