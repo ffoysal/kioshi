@@ -29,7 +29,7 @@ jobs: # a collection of steps
       - store_artifacts: # special step to save test results as as artifact
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: server/coverage/mocha-test.html
-          prefix: tests
+          prefix: test
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: server/coverage/index.html
           prefix: test
