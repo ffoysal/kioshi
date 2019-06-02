@@ -24,13 +24,13 @@ jobs: # a collection of steps
           command: cd server && npm test
       - run: # run coverage report
           name: code-coverage
-          command: "./server/node_modules/.bin/nyc report --reporter=text-lcov"
+          command: "cd server && ./node_modules/.bin/nyc report --reporter=text-lcov"
       - store_artifacts: # special step to save test results as as artifact
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: server/test-results.xml
+          path: server/covertest-results.xml
           prefix: tests
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: server/coverage
+          path: coverage
           prefix: coverage
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: server/test-results.xml
