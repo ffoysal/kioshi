@@ -5,7 +5,7 @@ let app = require('../server.js');
 let request = require('supertest')(app);
 let expect = require('chai').expect;
 
-describe('PUT /messages/:id', () => {
+describe('PATCH /messages/:id', () => {
   let msgLoc = null;
   before((done) => {
     request
@@ -34,9 +34,9 @@ describe('PUT /messages/:id', () => {
         done();
       });
   });
-  it('Should PUT return 204', (done) => {
+  it('Should PATCH return 204', (done) => {
     request
-      .put(msgLoc)
+      .patch(msgLoc)
       .send({ message: 'message got modified' })
       .expect(204, done);
   });
@@ -87,9 +87,9 @@ describe('DELETE /messages/:id', () => {
       .delete(msgLoc)
       .expect(404, done);
   });
-  it('Should PUT again /message:id return 404', (done) => {
+  it('Should PATCH again /message:id return 404', (done) => {
     request
-      .put(msgLoc)
+      .patch(msgLoc)
       .send({ message: 'just a message' })
       .expect(404, done);
   });
