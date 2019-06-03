@@ -1,4 +1,4 @@
-const express = require('express');
+
 const messageController = require('../controllers/messageController.js');
 
 module.exports.init = (apiRoutes, manageResponse) => {

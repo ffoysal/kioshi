@@ -58,9 +58,11 @@ module.exports = (app) => {
   */
   apiRoutes.use((err, req, res, next) => {
     //TODO Just for development mode
+    console.log('Need to check');
     console.log(err);
     sendError(err.status || 500, err.message || '', res);
   });
+
   // for all other routes
   app.use('*', (req, res) => {
     // console.log(req);

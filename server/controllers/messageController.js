@@ -37,12 +37,15 @@ exports.getMessage = (req, res, callback) => {
     function (err, msg) {
       if (err) {
         return callback({
-          status: 404,
+          status: 500,
           message: err.message,
           err: err
         });
       }
-      return callback(null, 200, msg);
+      if (msg) {
+        return callback(null, 200, msg);
+      }
+      return callback(null, 404);
     }
   );
 };
@@ -54,30 +57,37 @@ exports.deleteMessage = (req, res, callback) => {
     function (err, deletedMsg) {
       if (err) {
         return callback({
-          status: 404,
+          status: 500,
           message: err.message,
           err: err
         });
       }
-      return callback(null, 204);
+      if (deletedMsg) {
+        return callback(null, 204);
+      }
+      return callback(null, 404);
     }
   );
 };
 
 exports.updateMessage = (req, res, callback) => {
-  console.log(req.body);
   Message.findOneAndUpdate(
     { _id: req.params.id },
     { $set: { message: req.body.message, isPalindrome: messageService.isPalindrome(req.body.message), length: messageService.msgLength(req.body.message) } },
+    { useFindAndModify: false },
     function (err, msg) {
       if (err) {
         return callback({
-          status: 404,
+          status: 500,
           message: err.message,
           err: err
         });
       }
-      return callback(null, 204);
+      if (msg) {
+        return callback(null, 204);
+      }
+      return callback(null, 404);
+
     }
   );
 };
