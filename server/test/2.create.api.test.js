@@ -23,5 +23,30 @@ describe('POST /messages [Create a Messages]', () => {
         done();
       });
   });
+
+  it('should return 400 for invalid message', (done) => {
+    request
+      .post('/messages')
+      .send({
+        message: 'mokul3'
+      })
+      .expect(400, done());
+  });
+  it('should return 400 for extra key in body', (done) => {
+    request
+      .post('/messages')
+      .send({
+        message: 'mokul',
+        'extra': 'extra'
+      })
+      .expect(400, done());
+  });
+  it('should return 400 for empty body', (done) => {
+    request
+      .post('/messages')
+      .send()
+      .expect(400, done());
+  });
+
 });
 

@@ -27,5 +27,9 @@ module.exports.init = (apiRoutes, manageResponse) => {
     });
   });
 
-  //apiRoutes.get('/', api.listMessages);
+  apiRoutes.get('/', (req, res, next) => {
+    messageController.listMessages(req, res, (err, status, response) => {
+      manageResponse(err, status, response, res, next);
+    });
+  });
 };
