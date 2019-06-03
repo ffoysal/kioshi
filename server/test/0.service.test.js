@@ -35,6 +35,4 @@ describe('Message Service Unit Test', () => {
     expect(ms.isMsgValid('abcdef2')).to.false;
     done();
   });
-
-
 });
