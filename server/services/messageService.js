@@ -1,7 +1,10 @@
 let msgLength = (msg) => {
   return msg.length;
 };
-
+/**
+ * Determine if a message is palindrome or not
+ * 
+ */
 exports.isPalindrome = (msg) => {
   if (!msg || msgLength(msg) < 3) {
     return false;
@@ -16,6 +19,9 @@ exports.isPalindrome = (msg) => {
 
 const msgRegex = /[a-zA-z]{3}$/;
 
+/**
+ * Validate a message with specific requirements
+ */
 exports.isMsgValid = (msg) => {
   return msgRegex.test(msg);
 };

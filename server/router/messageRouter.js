@@ -21,7 +21,7 @@ module.exports.init = (apiRoutes, manageResponse) => {
     });
   });
 
-  apiRoutes.put('/:id', (req, res, next) => {
+  apiRoutes.patch('/:id', (req, res, next) => {
     messageController.updateMessage(req, res, (err, status, response) => {
       manageResponse(err, status, response, res, next);
     });
