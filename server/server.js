@@ -22,8 +22,10 @@ if (process.env.ENVIRONMENT == 'test') {
     mongoose.connect(mongoUri, { useNewUrlParser: true });
   });
 } else {
+  // Log all API request
+  app.use(logger('combined'));
   // connect to database, if fail exit from app
-  mongoose.connect(config.mongoDBURI, { useNewUrlParser: true }, function (err, database) {
+  mongoose.connect(config.mongoDBURI, { useNewUrlParser: true }, function (err) {
     if (err) {
       console.log('Cannot connect to database');
       process.exit(1);
@@ -31,8 +33,6 @@ if (process.env.ENVIRONMENT == 'test') {
   });
 }
 
-// Log all API request
-//app.use(logger('dev'));
 
 // Parse urlencoded bodies to JSON
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,6 +46,7 @@ app.get('/', function (req, res) {
 // start the app
 app.listen(config.serverPort);
 
+console.log('Server started at the port: ' + config.serverPort);
 router(app);
 
 module.exports = app;
