@@ -5,7 +5,10 @@ const messageService = require('../services/messageService');
 
 exports.createMessage = (req, res, callback) => {
 
-  if ((Object.keys(req.body) && Object.keys(req.body).length !== 1) || !messageService.isMsgValid(req.body.message)) {
+  if (!(Object.keys(req.body) &&
+    Object.keys(req.body).length === 1 &&
+    messageService.isMsgValid(req.body.message)
+  )) {
     return callback({
       status: 400,
       message: 'invalid message body'
@@ -70,25 +73,44 @@ exports.deleteMessage = (req, res, callback) => {
   );
 };
 
+
 exports.updateMessage = (req, res, callback) => {
-  Message.findOneAndUpdate(
-    { _id: req.params.id },
-    { $set: { message: req.body.message, isPalindrome: messageService.isPalindrome(req.body.message), length: messageService.msgLength(req.body.message) } },
-    { useFindAndModify: false },
-    function (err, msg) {
-      if (err) {
-        return callback({
-          status: 500,
-          message: err.message,
-          err: err
-        });
-      }
-      if (msg) {
+  if (!(Object.keys(req.body) &&
+    Object.keys(req.body).length === 1 &&
+    messageService.isMsgValid(req.body.message))) {
+    return callback({
+      status: 400,
+      message: 'invalid message body'
+    }, 400);
+  }
+
+  Message.findById(req.params.id, function (err, msg) {
+    if (err) {
+      return callback({
+        status: 500,
+        message: err.message,
+        err: err
+      });
+    }
+    if (!msg) {
+      return callback(null, 404);
+    }
+    msg.message = req.body.message;
+    msg.isPalindrome = messageService.isPalindrome(req.body.message);
+    msg.length = messageService.msgLength(req.body.message);
+    msg.save(function (err) {
+      if (!err) {
         return callback(null, 204);
       }
-      return callback(null, 404);
+      else {
+        console.log(err);
+        return callback(err, 500);
+      }
+    });
 
-    }
+
+
+  }
   );
 };
 
