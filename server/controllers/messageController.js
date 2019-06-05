@@ -13,7 +13,7 @@ exports.createMessage = (req, res, callback) => {
     return callback({
       status: 400,
       message: 'invalid message body'
-    }, 400);
+    });
   }
 
   let message = new Message({
@@ -29,7 +29,7 @@ exports.createMessage = (req, res, callback) => {
       return callback({
         status: 500,
         message: err.message
-      }, 500);
+      });
     }
     res.set({ 'Location': '/messages/' + msg._id });
     callback(null, 201, null);
@@ -84,7 +84,7 @@ exports.updateMessage = (req, res, callback) => {
     return callback({
       status: 400,
       message: 'invalid message body'
-    }, 400);
+    });
   }
 
   Message.findById(req.params.id, function (err, msg) {
@@ -110,9 +110,6 @@ exports.updateMessage = (req, res, callback) => {
         return callback(err, 500);
       }
     });
-
-
-
   }
   );
 };

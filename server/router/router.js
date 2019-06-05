@@ -3,13 +3,9 @@ const messageRouter = require('./messageRouter.js');
 
 let manageResponse = (err, status, responseBody, res, next) => {
   if (err) {
-    next(err);
-  }
-  else if (responseBody) {
+    sendError(err.status, err.message, res);
+  } else {
     sendResponse(status, responseBody, res);
-  }
-  else {
-    res.status(status).send();
   }
 };
 
@@ -21,7 +17,6 @@ let sendError = (status, message, res) => {
   sendResponse(
     status,
     {
-      ok: false,
       message: message
     },
     res
@@ -45,23 +40,13 @@ module.exports = (app) => {
     });
   });
 
-  /*
-  // Handle errors Development or test environment
-  if (config.environment === "development" || config.environment === "test") {
-    // Handle Errors in api rest
-    apiRoutes.use((err, req, res, next) => {
-      //TODO Just for development mode
-      console.log(err);
-      sendError(err.status || 500, err.message || "", err, res);
-    });
-  }
-  */
+  // all error handle by express error middleware route through this
   apiRoutes.use((err, req, res, next) => {
-    //TODO Just for development mode
-    console.log('Need to check');
+    //For developement purpose
     console.log(err);
     sendError(err.status || 500, err.message || '', res);
   });
+
 
   // for all other routes
   app.use('*', (req, res) => {
