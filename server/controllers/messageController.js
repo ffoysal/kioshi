@@ -2,7 +2,7 @@ const uuidv4 = require('uuid/v4');
 const Message = require('../models/message');
 const messageService = require('../services/messageService');
 
-
+// Create a message
 exports.createMessage = (req, res, callback) => {
 
   if (!(Object.keys(req.body) &&
@@ -36,6 +36,7 @@ exports.createMessage = (req, res, callback) => {
   });
 };
 
+// get a message details with the specified id
 exports.getMessage = (req, res, callback) => {
   Message.findById(
     req.params.id,
@@ -55,7 +56,7 @@ exports.getMessage = (req, res, callback) => {
   );
 };
 
-
+// delete a message with the specified id
 exports.deleteMessage = (req, res, callback) => {
   Message.findOneAndDelete(
     { _id: req.params.id },
@@ -75,7 +76,7 @@ exports.deleteMessage = (req, res, callback) => {
   );
 };
 
-
+// update a message with the specified id
 exports.updateMessage = (req, res, callback) => {
   if (!(Object.keys(req.body) &&
     Object.keys(req.body).length === 1 &&
@@ -116,10 +117,14 @@ exports.updateMessage = (req, res, callback) => {
   );
 };
 
+// list messages details.
+// starting page=1, entries per page(limit=3)
+// no palindrome filter applied
 exports.listMessages = (req, res, callback) => {
   let limit = 3, page = 1;
   let requestedPage = req.query.page;
   let requestedLimit = req.query.limit;
+  let palindromeFlag = req.query.palindrome;
   if (requestedPage && requestedPage > 0) {
     page = requestedPage;
   }
@@ -131,8 +136,13 @@ exports.listMessages = (req, res, callback) => {
     page: page,
     limit: limit
   };
+  let query = {};
+  // only true or false string accepted
+  if (palindromeFlag === 'true' || palindromeFlag == 'false') {
+    query.isPalindrome = palindromeFlag;
+  }
 
-  Message.paginate({}, options, function (err, result) {
+  Message.paginate(query, options, function (err, result) {
     if (err) {
       return callback({
         status: 500,
