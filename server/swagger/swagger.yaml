@@ -38,6 +38,23 @@ paths:
         - "message"
       summary: "Return list of messages"
       description: "Return list of message with aditional paging info"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          description: "A starting page number, default to 1"
+          required: false
+        - in: "query"
+          name: "limit"
+          type: "integer"
+          description: "Number of entries per page, default to 3"
+          required: false
+        - in: "query"
+          name: "palindrome"
+          type: "boolean"
+          description: |
+            Additional filter based on whether palindrome or not(true/false),
+            No filter applied by default
       responses:
         200:
           description: "Return list of message with paging info"
