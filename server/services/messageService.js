@@ -1,4 +1,7 @@
 let msgLength = (msg) => {
+  if (!msg)
+    return 0;
+
   return msg.length;
 };
 /**

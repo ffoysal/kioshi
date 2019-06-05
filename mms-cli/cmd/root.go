@@ -2,10 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"mms-cli/client"
+	"net/http"
 	"os"
 
 	"github.com/spf13/cobra"
 )
+
+var rClient *client.RestClient
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -19,6 +23,14 @@ var RootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
+}
+
+func init() {
+	rClient = &client.RestClient{
+		MessagesResourceURI: getMmsURI() + "/messages",
+		HealthResoruceURI:   getMmsURI() + "/health",
+		HTTPClient:          &http.Client{},
+	}
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

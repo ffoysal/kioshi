@@ -7,6 +7,7 @@ exports.createMessage = (req, res, callback) => {
 
   if (!(Object.keys(req.body) &&
     Object.keys(req.body).length === 1 &&
+    req.body.message &&
     messageService.isMsgValid(req.body.message)
   )) {
     return callback({
@@ -14,6 +15,7 @@ exports.createMessage = (req, res, callback) => {
       message: 'invalid message body'
     }, 400);
   }
+
   let message = new Message({
     _id: uuidv4().split('-').join(''),
     message: req.body.message,

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -25,7 +26,12 @@ func init() {
 }
 
 func getMessage(cmd *cobra.Command, args []string) {
-	baseURI := getMmsURI()
-	fmt.Println(args)
-	fmt.Println(baseURI)
+	msg, err := rClient.GetMessage(args[0])
+	if err != nil {
+		fmt.Println("Cannot get the details.", err)
+		return
+	}
+	b, _ := json.MarshalIndent(msg, "", " ")
+	fmt.Println(string(b))
+
 }

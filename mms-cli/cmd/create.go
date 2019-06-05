@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -24,7 +25,22 @@ func init() {
 	RootCmd.AddCommand(createCmd)
 }
 
-func createMessage(cmd *cobra.Command, args []string) {
+// message body for the post and patch operation
+type uMessage struct {
+	Msg string `json:"message"`
+}
 
-	fmt.Println(args)
+func createMessage(cmd *cobra.Command, args []string) {
+	msg := &uMessage{Msg: args[0]}
+	b, err := json.Marshal(msg)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	id, err := rClient.CreateMessage(b)
+	if err != nil {
+		fmt.Println("Error happened")
+		return
+	}
+	fmt.Println("Message has been created with the ID: " + *id)
 }
