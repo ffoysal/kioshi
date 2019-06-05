@@ -34,6 +34,14 @@ type Message struct {
 	LastUpdatedAt string `json:"lastUpdatedAt"`
 }
 
+// ListMessages represents list reponse
+type ListMessages struct {
+	Msgs        []Message `json:"messages"`
+	Page        int       `json:"page"`
+	TotalPage   int       `json:"totalPage"`
+	HasNextPage bool      `json:hasNextPage`
+}
+
 // CreateMessage create a new message with the provided string as jsonBody
 func (c *RestClient) CreateMessage(jsonBody []byte) (*string, error) {
 	req, err := http.NewRequest("POST", c.MessagesResourceURI, bytes.NewBuffer(jsonBody))
@@ -111,4 +119,24 @@ func (c *RestClient) UpdateMessage(msgID string, jsonBody []byte) (int, error) {
 		return 0, errors.New("Error happend. Response status code: " + resp.Status)
 	}
 	return resp.StatusCode, nil
+}
+
+// ListMessages returns all the messages stored in the server
+func (c *RestClient) ListMessages() (*ListMessages, error) {
+	req, err := http.NewRequest("GET", c.MessagesResourceURI, nil)
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	//fmt.Println("response status: ", resp.Status)
+	//fmt.Println("response header: ", resp.Header.Get("Location"))
+	body, _ := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != 200 {
+		return nil, errors.New("Error happened while getting the message with ID: " + string(body))
+	}
+	msgs := &ListMessages{}
+	json.Unmarshal(body, msgs)
+	return msgs, nil
 }
