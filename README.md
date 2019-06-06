@@ -129,7 +129,7 @@ _Note `try out` button in swagger ui will not work for this deployment._
 
 ### Delete Cluster
 
-To delete the kubernetes cluster
+To cleanup, delete the kubernetes cluster
 ```
-kops delete cluster --yes
+kops delete cluster --name=kioshi.k8s.local
 ```
