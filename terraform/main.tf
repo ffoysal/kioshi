@@ -28,4 +28,5 @@ module "app_ecs" {
   vpc_id                  = "${module.kio_vpc.vpc_id}"
   ecs_task_execution_role = "${module.kio_iam.ecs_exec_role_arn}"
   db_ip                   = "${module.db.db_ip}"
+  ecs_auto_scale_role_arn = "${module.kio_iam.ecs_auto_scale_role_arn}"
 }
