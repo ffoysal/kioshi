@@ -7,7 +7,7 @@ module.exports.init = (app, express) => {
   const options = YAML.load('./swagger/swagger.yaml');
 
 
-  options.host = 'localhost:' + config.serverPort;
+  options.host = config.swaggerHostURI || 'localhost:' + config.serverPort;
 
   routerSwagger.use('/', swaggerUi.serve, swaggerUi.setup(options));
   app.use('/docs', routerSwagger);

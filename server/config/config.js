@@ -8,7 +8,8 @@ var config = {
   serverPort: 3000,
   mongoDBURI: dbUri,
   mongoDatabaseName: process.env.MONGODB_URI || 'mms-db',
-  mongoCollection: 'messages'
+  mongoCollection: 'messages',
+  swaggerHostURI: process.env.SWAGGER_URI
 };
 
 module.exports = config;
