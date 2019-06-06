@@ -29,3 +29,15 @@ jobs: # a collection of steps
           path: server/coverage
           prefix: test
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+  docker_build:
+    branches:
+      only: master
+    machine: true
+    steps:
+      - checkout:
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+        # build the application image
+      - run: docker build -t ffoysal/kioshi:latest .
+        # deploy the image
+      - run: docker push ffoysal/kioshi:latest
