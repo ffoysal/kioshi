@@ -1,0 +1,37 @@
+# DB deployment object
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+        tier: backend
+    spec:
+      containers:
+        - name: mongo
+          image: mongo
+          ports:
+            - name: http
+              containerPort: 27017
+---
+# DB service by which app will reach to db
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: mongo
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
