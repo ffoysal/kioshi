@@ -35,7 +35,7 @@ jobs: # a collection of steps
       - checkout:
       - run:
           name: Publish Docker Image to Docker Hub
-          commaand: |
+          command: |
             docker build -t ffoysal/kioshi:latest .
             docker tag ffoysal/kioshi:latest ffoysal/kioshi:$CIRCLE_BUILD_NUM
             docker login -u $DOCKER_USER -p $DOCKER_PASS
