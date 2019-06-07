@@ -265,7 +265,8 @@ Outputs:
 alb = mms-kio-alb-124578.us-east-1.elb.amazonaws.com
 ```
 go to http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
-It will return `503` as because MongoDB is running on EC2 instance which has not been ready state yet. Wait 2/3 minutes the app will be ready.
+It will return `503` as because MongoDB is running on EC2 instance which has not been ready state yet. Detail logs can be found at cloudwatch log group `mms-kio-ecs`. Wait 2/3 minutes the app will be ready.
+
 
 http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
 
