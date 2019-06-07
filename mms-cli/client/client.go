@@ -46,7 +46,6 @@ type ListMessages struct {
 
 // CreateMessage create a new message with the provided string as jsonBody
 func (c *RestClient) CreateMessage(jsonBody []byte) (*string, error) {
-	fmt.Println(string(jsonBody))
 	req, err := http.NewRequest("POST", c.MessagesResourceURI, bytes.NewBuffer(jsonBody))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := c.HTTPClient.Do(req)
