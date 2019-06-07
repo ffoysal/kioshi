@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/ffoysal/kioshi/mms-cli/client"
+	"mms-cli/client"
 
 	"github.com/spf13/cobra"
 )
