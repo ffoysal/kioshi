@@ -1,6 +1,6 @@
 package main
 
-import "mms-cli/cmd"
+import "github.com/ffoysal/kioshi/mms-cli/cmd"
 
 func main() {
 	cmd.Execute()
