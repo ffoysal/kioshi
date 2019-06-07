@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"mms-cli/client"
 	"net/http"
 	"os"
 
-	"mms-cli/client"
 
 	"github.com/spf13/cobra"
 )
