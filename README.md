@@ -1,5 +1,23 @@
 [![CircleCI](https://circleci.com/gh/ffoysal/kioshi/tree/master.svg?style=svg)](https://circleci.com/gh/ffoysal/kioshi/tree/master)
 
+# Overview
+
+Kioshi is a simple REST api which has only one purpose is to manage messages. The user will be able to create a message using `<uri>/messages` endpoint and should get the details about the messages. The app has followed RESTful design pattern. The design tries to comply with the HTTP code for various operations. The successful operations and returned HTTP code has been described into the following table
+
+| Operations | HTTP Verb | HTTP Returned Code | Comments |
+| ---------- | --------- | ------------------ | -------- |
+| Create message | POST | 201 | request body `{"message":"racecar"}`, response body null, response header `Location:/messages/124fghk` |
+| Get a message details | GET | 200 | response body will have message details |
+| Update a message | PATCH | 204 | no response body |
+| Delete a message | DELETE | 204 | no response body|
+| List messages | GET | 200 | response has list of messages in the body|
+
+The details api documentation would be found at the endpoint `<uri>/docs`
+
+The api is implemented using NodeJS, ExpressJS, MongoDB. The high level architecture of the app is as follows
+
+![alt text](diagram/app.jpg, "architecture")
+
 # Deployments
 
 ## kubernetes (kops)
