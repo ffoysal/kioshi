@@ -7,8 +7,9 @@ console.log('DB URI', dbUri);
 var config = {
   serverPort: 3000,
   mongoDBURI: dbUri,
-  mongoDatabaseName: process.env.MONGODB_URI || 'mms-db',
-  mongoCollection: 'messages'
+  mongoDatabaseName: 'mms-db',
+  mongoCollection: 'messages',
+  swaggerHostURI: process.env.SWAGGER_URI
 };
 
 module.exports = config;

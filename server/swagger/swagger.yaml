@@ -17,12 +17,12 @@ paths:
       summary: "Create a new message"
       description: |
         Create a new message and set location header
-        /message/:id where id is generted by the server
+        /messages/:id where id is generted by the server
       parameters:
         - in: "body"
           name: "body"
           description: |
-            A JSON object having only one key called message:
+            A JSON object having only one key called "message"
           required: true
           schema:
             $ref: "#/definitions/MessagePostBody"
