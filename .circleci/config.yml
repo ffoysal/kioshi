@@ -57,7 +57,7 @@ jobs: # a collection of steps
             cd dist/ && gzip *
       - add_ssh_keys
       - run:
-          name: create release
+          name: create cli release
           command: |
             tag=$(semantics --output-tag)
             if [ "$tag" ]; then
