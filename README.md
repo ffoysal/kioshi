@@ -1,8 +1,15 @@
 [![CircleCI](https://circleci.com/gh/ffoysal/kioshi/tree/master.svg?style=svg)](https://circleci.com/gh/ffoysal/kioshi/tree/master)
 
+# Documentation Index
+- [Overview](#Overview)
+- [Architecture](#Architecture)
+- [Run app locally](#Run-locally)
+- [Run using docker-compose](#Run-using-docker-compose)
+- [AWS Deployment (kops)](#kubernetes-(kops))
+- [AWS Deployment (terraform)](#AWS-Terraform)
 # Overview
 
-Kioshi is a simple REST api which has only one purpose is to manage messages. The user will be able to create a message using `<uri>/messages` endpoint and should get the details about the messages. The app has followed RESTful design pattern. The design tries to comply with the HTTP code for various operations. The successful operations and returned HTTP code has been described into the following table
+Kioshi is a simple REST api which has only one purpose is to manage messages. The user will be able to create a message using `<uri>/messages` endpoint and should get the details about the messages. Specifically if a message is palindrome or not. The app has followed RESTful design pattern. The design tries to comply with the HTTP code for various operations. The successful operations and returned HTTP code has been described into the following table
 
 | Operations | HTTP Verb | HTTP Returned Code | Comments |
 | ---------- | --------- | ------------------ | -------- |
@@ -14,11 +21,82 @@ Kioshi is a simple REST api which has only one purpose is to manage messages. Th
 
 The details api documentation would be found at the endpoint `<uri>/docs`
 
+## Architecture
+
 The api is implemented using NodeJS, ExpressJS, MongoDB. The high level architecture of the app is as follows
 
 ![alt text](diagram/app.jpg)
 
-# Deployments
+- **Router**: It is a expressjs component that routes to various controller method based on request path.
+- **Controller**: It is responsible to call proper service method and model based on the request
+- **Service**: All the business logics are implemented in here.
+- **Model**: Manage model state with the database.
+
+## Run locally
+
+To run the app locally, pre-requisites
+
+- Install `NodeJS`
+- Install `npm`
+- Install `MongoDB` or use mongo db docker container
+
+
+Once the pre-requisites are done, follow the steps in order
+```
+git clone https://github.com/ffoysal/kioshi.git
+```
+```
+cd kioshi/server
+```
+```
+npm install
+```
+It will download and install all the package dependency
+
+_Make sure mongodb is running in `localhost` at port `27017`. If the DB is running somewhere else then export env as_
+
+```
+export MONGODB_URI=mongodb://<DB-HOST>:<PORT>/mms-db
+```
+
+```
+npm start
+```
+It will open the port `3000` on `localhost`
+
+For server health status http://localhost:3000/health
+
+For api docs http://localhost:3000/docs
+
+For api operation http://localhost:3000/messages
+
+## Run using docker-compose
+
+pre-requisites are
+
+- `docker` must be installed
+- `docker-compose` must be installed
+
+Follow the steps in order
+
+```
+git clone https://github.com/ffoysal/kioshi.git
+```
+
+```
+docker-compose up
+```
+_It will download mongodb docker container and start it. The app container will be built and start the app container._
+
+The app will be running at port `3000` on `localhost`
+
+For server health status http://localhost:3000/health
+
+For api docs http://localhost:3000/docs
+
+For api operation http://localhost:3000/messages
+
+# Cloud Deployments
 
 ## kubernetes (kops)
 
@@ -134,9 +212,10 @@ The supported paths by the app are
 
 `<uri>.us-east-1.elb.amazonaws.com/health`
 
+`<uri>.us-east-1.elb.amazonaws.com/docs`
+
 `<uri>.us-east-1.elb.amazonaws.com/messages`
 
-`<uri>.us-east-1.elb.amazonaws.com/docs`
 
 All the supported operations and examples are provided in `/docs` path.
 
@@ -151,3 +230,51 @@ To cleanup, delete the kubernetes cluster
 ```
 kops delete cluster --name=kioshi.k8s.local
 ```
+
+## AWS Terraform
+
+The high level architecture for AWS deployment is below. MongoDB container is running in EC2 instance and app container is running ECS Fargate.
+![alt text](diagram/aws.jpg)
+
+_Note: for simplicity all security groups, target group, ECS service not shown in the diagram_
+
+The `terraform` code is written in the version of `0.11.7`. Please download the [terraform 0.11.7](https://releases.hashicorp.com/terraform/0.11.7/) for your OS. Assumming the AWS credentials is stored in `$HOME/.aws/credentials` with default profile. And the infrastructure will be created in `us-east-1` region.
+
+Follow the steps below in order to deploy the infrastructure in AWS.
+```
+git clone https://github.com/ffoysal/kioshi.git
+```
+```
+cd kioshi/terraform
+```
+```
+terraform plan
+````
+_it will show how many resources and what resources will be created._
+```
+terraform apply -auto-approve
+```
+it will start creating AWS resourcess. It will take couple of miniutes. When finished the last lines will be something like this
+```
+Apply complete! Resources: 32 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+alb = mms-kio-alb-124578.us-east-1.elb.amazonaws.com
+```
+go to http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
+It will return `503` as because MongoDB is running on EC2 instance which has not been ready state yet. Wait 2/3 minutes the app will be ready.
+
+http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
+
+http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/docs
+
+http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/messages
+
+_Note: for every deployment this number `124578` in the URL is different_
+
+For REST api best client tool would be [postman](https://www.getpostman.com/) or `curl` or use [mms-cli](#CLI-for-Kioshi-Api)
+
+
+## CLI for Kioshi Api
+
