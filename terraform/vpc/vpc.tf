@@ -17,7 +17,7 @@ locals {
   private_app_az   = "${data.aws_availability_zones.available_azs.names[1]}"
 
   public_a_cidr = "${cidrsubnet(aws_vpc.kioshi_main.cidr_block, 8, 3)}"
-  private_a_az  = "${data.aws_availability_zones.available_azs.names[0]}"
+  public_a_az   = "${data.aws_availability_zones.available_azs.names[0]}"
 
   public_b_cidr = "${cidrsubnet(aws_vpc.kioshi_main.cidr_block, 8, 4)}"
   public_b_az   = "${data.aws_availability_zones.available_azs.names[1]}"
@@ -50,12 +50,12 @@ resource "aws_subnet" "private_app" {
 # Create public subnets for alb
 resource "aws_subnet" "public_a" {
   cidr_block              = "${local.public_a_cidr}"
-  availability_zone       = "${local.private_a_az}"
+  availability_zone       = "${local.public_a_az}"
   vpc_id                  = "${aws_vpc.kioshi_main.id}"
   map_public_ip_on_launch = true
 
   tags = {
-    Name       = "${var.deploy_name}-${local.private_a_az}-public-${local.public_a_cidr}"
+    Name       = "${var.deploy_name}-${local.public_a_az}-public-${local.public_a_cidr}"
     deployment = "${var.deploy_name}"
   }
 }
