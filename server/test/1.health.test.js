@@ -1,10 +1,11 @@
 process.env.ENVIRONMENT = 'test';
 
+/**
+ * This is to test health check end point
+ */
 let app = require('../server.js');
-//let config = require("./test_variables.js");
+
 let request = require('supertest')(app);
-//let assert = require('chai').assert;
-//let expect = require('chai').expect;
 
 describe('GET /health', () => {
   it('should render 200', (done) => {

@@ -1,5 +1,8 @@
 process.env.ENVIRONMENT = 'test';
 
+/**
+ * This is to verify create api
+ */
 let app = require('../server.js');
 
 let request = require('supertest')(app);

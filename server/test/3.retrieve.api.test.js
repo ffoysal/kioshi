@@ -1,10 +1,10 @@
 process.env.ENVIRONMENT = 'test';
 
-let mongoose = require('mongoose');
+/**
+ * This is to verify retrive a single message api
+ */
 let app = require('../server.js');
-//let config = require("./test_variables.js");
 let request = require('supertest')(app);
-//let assert = require('chai').assert;
 let expect = require('chai').expect;
 
 describe('GET /messages/:id', () => {
