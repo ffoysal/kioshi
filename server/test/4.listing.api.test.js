@@ -95,5 +95,16 @@ describe('GET /messages [List messages]', () => {
       });
   });
 
-
+  it('should have keys [messages, page, totalPages, totalMessages,hasNextPage]', (done) => {
+    request
+      .get('/messages')
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+          return done();
+        }
+        expect(res.body).to.have.keys('messages', 'page', 'totalPages', 'totalMessages', 'hasNextPage');
+        done();
+      });
+  });
 });

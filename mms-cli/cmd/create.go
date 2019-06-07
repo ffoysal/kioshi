@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Create the command
 var createCmd = &cobra.Command{
 	Use:   "create [message]",
 	Short: "Create a message",
@@ -21,6 +22,7 @@ var createCmd = &cobra.Command{
 	Run: createMessage,
 }
 
+// register the command. This method called by cobra
 func init() {
 	RootCmd.AddCommand(createCmd)
 }
@@ -30,6 +32,7 @@ type uMessage struct {
 	Msg string `json:"message"`
 }
 
+// make request to api to create a message
 func createMessage(cmd *cobra.Command, args []string) {
 	msg := &uMessage{Msg: args[0]}
 	b, err := json.Marshal(msg)
@@ -39,7 +42,7 @@ func createMessage(cmd *cobra.Command, args []string) {
 	}
 	id, err := rClient.CreateMessage(b)
 	if err != nil {
-		fmt.Println("Error happened")
+		fmt.Println("Error happened", err)
 		return
 	}
 	fmt.Println("Message has been created with the ID: " + *id)

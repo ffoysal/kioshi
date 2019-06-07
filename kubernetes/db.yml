@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: mongo
-          image: mongo
+          image: mongo:4.0.4
           ports:
             - name: http
               containerPort: 27017

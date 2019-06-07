@@ -5,4 +5,4 @@ yum update -y
 sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 
 # run mongodb container
-docker run -d -p 27017:27017 --name mongodb mongo
+docker run -d -p 27017:27017 --name mongodb mongo:4.0.4

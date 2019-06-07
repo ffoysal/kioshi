@@ -25,6 +25,7 @@ var RootCmd = &cobra.Command{
 	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
+// init initialize the default rest client
 func init() {
 	rClient = &client.RestClient{
 		MessagesResourceURI: getMmsURI() + "/messages",
@@ -42,10 +43,11 @@ func Execute() {
 	}
 }
 
+// getMmsURI read api uri from env
 func getMmsURI() string {
 	uri := os.Getenv("MMS_URI")
 	if uri == "" {
-		fmt.Println("Please the env MMS_URI (.i.e. http://localhost:3000/")
+		fmt.Println("Please the env MMS_URI (.i.e. export MMS_URI=http://localhost:3000")
 		os.Exit(1)
 	}
 	return uri
