@@ -29,17 +29,23 @@ jobs: # a collection of steps
           path: server/coverage
           prefix: test
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
-  docker_build:
+  publish-container:
     branches:
       only: master
     machine: true
     steps:
       - checkout:
-      - run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASS
-        # build the application image
-      - run: docker build -t ffoysal/kioshi:latest .
-      - run: docker tag ffoysal/kioshi:latest ffoysal/kioshi:$CIRCLE_BUILD_NUM
-        # deploy the image
-      - run: docker push ffoysal/kioshi:latest
-      - run: docker push ffoysal/kioshi:$CIRCLE_BUILD_NUM
+      - run:
+          name: Publish Docker Image to Docker Hub
+          commaand: |
+            docker build -t ffoysal/kioshi:latest .
+            docker tag ffoysal/kioshi:latest ffoysal/kioshi:$CIRCLE_BUILD_NUM
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push ffoysal/kioshi:latest
+            docker push ffoysal/kioshi:$CIRCLE_BUILD_NUM
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build
+      - publish-container
