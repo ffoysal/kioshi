@@ -1,6 +1,8 @@
 process.env.ENVIRONMENT = 'test';
 
-
+/**
+ * This is to verify delete message api works
+ */
 let app = require('../server.js');
 let request = require('supertest')(app);
 let expect = require('chai').expect;

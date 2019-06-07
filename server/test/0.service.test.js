@@ -1,9 +1,11 @@
 process.env.ENVIRONMENT = 'test';
+/**
+ * This is unit testing for the messageService
+ * 
+ */
 
 let ms = require('../services/messageService');
-//let config = require("./test_variables.js");
-//let request = require('supertest');
-//let assert = require('chai').assert;
+
 let expect = require('chai').expect;
 
 describe('Message Service Unit Test', () => {

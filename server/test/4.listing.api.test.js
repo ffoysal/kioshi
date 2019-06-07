@@ -1,5 +1,8 @@
 process.env.ENVIRONMENT = 'test';
 
+/**
+ * This is to verify get list of messages work properly
+ */
 let mongoose = require('mongoose');
 let app = require('../server.js');
 let request = require('supertest')(app);

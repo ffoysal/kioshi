@@ -1,12 +1,14 @@
 [![CircleCI](https://circleci.com/gh/ffoysal/kioshi/tree/master.svg?style=svg)](https://circleci.com/gh/ffoysal/kioshi/tree/master)
 
 # Documentation Index
+
 - [Overview](#Overview)
-- [Architecture](#Architecture)
+- [Api Architecture](#Architecture)
 - [Run app locally](#Run-locally)
 - [Run using docker-compose](#Run-using-docker-compose)
 - [AWS Deployment (kops)](#kubernetes-(kops))
 - [AWS Deployment (terraform)](#AWS-Terraform)
+
 # Overview
 
 Kioshi is a simple REST api which has only one purpose is to manage messages. The user will be able to create a message using `<uri>/messages` endpoint and should get the details about the messages. Specifically if a message is palindrome or not. The app has followed RESTful design pattern. The design tries to comply with the HTTP code for various operations. The successful operations and returned HTTP code has been described into the following table
@@ -249,6 +251,12 @@ git clone https://github.com/ffoysal/kioshi.git
 ```
 cd kioshi/terraform
 ```
+```
+terraform init
+```
+
+_Note: It will load all the terraform moudles._
+
 ```
 terraform plan
 ````
