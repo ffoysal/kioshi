@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kioshi-deployment
+spec:
+  selector:
+    matchLabels:
+      app: kioshi
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: kioshi
+    spec:
+      containers:
+        - name: kioshi
+          image: ffoysal/kioshi:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGODB_URI
+              value: "mongodb://mongo:27017/mms-db"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: kioshi
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
