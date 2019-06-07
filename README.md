@@ -82,7 +82,9 @@ Follow the steps in order
 ```
 git clone https://github.com/ffoysal/kioshi.git
 ```
-
+```
+cd kioshi
+```
 ```
 docker-compose up
 ```
