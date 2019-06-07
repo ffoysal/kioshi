@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// create delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete [message Id]",
 	Short: "Delete a message",
@@ -20,10 +21,12 @@ var deleteCmd = &cobra.Command{
 	Run: deleteMessage,
 }
 
+// register the command
 func init() {
 	RootCmd.AddCommand(deleteCmd)
 }
 
+// delete a message
 func deleteMessage(cmd *cobra.Command, args []string) {
 	_, err := rClient.DeleteMessage(args[0])
 	if err != nil {

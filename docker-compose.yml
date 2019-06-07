@@ -10,6 +10,6 @@ services:
       MONGODB_URI: mongodb://mongo:27017/mms-db
   mongo:
     container_name: mongo
-    image: mongo
+    image: mongo:4.0.4
     ports:
       - "27017:27017"

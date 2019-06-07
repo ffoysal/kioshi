@@ -150,7 +150,8 @@ exports.listMessages = (req, res, callback) => {
     let msg = {
       messages: result.docs,
       page: result.page,
-      totalPage: result.totalPages,
+      totalPages: result.totalPages,
+      totalMessages: result.totalDocs,
       hasNextPage: result.hasNextPage
     };
     return callback(null, 200, msg);

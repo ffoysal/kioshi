@@ -161,7 +161,10 @@ definitions:
       page:
         type: "number"
         example: 1
-      totalPage:
+      totalPages:
+        type: "number"
+        example: 10
+      totalMessages:
         type: "number"
         example: 10
       hasNextPage:

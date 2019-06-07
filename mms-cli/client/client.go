@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -28,7 +29,7 @@ type ResourcePath struct {
 type Message struct {
 	ID            string `json:"_id"`
 	Msg           string `json:"message"`
-	IsPalindrome  bool   `json:"isPalindrom"`
+	IsPalindrome  bool   `json:"isPalindrome"`
 	Length        int64  `json:"length"`
 	CreatedAt     string `json:"createdAt"`
 	LastUpdatedAt string `json:"lastUpdatedAt"`
@@ -36,14 +37,16 @@ type Message struct {
 
 // ListMessages represents list reponse
 type ListMessages struct {
-	Msgs        []Message `json:"messages"`
-	Page        int       `json:"page"`
-	TotalPage   int       `json:"totalPage"`
-	HasNextPage bool      `json:hasNextPage`
+	Msgs          []Message `json:"messages"`
+	Page          int       `json:"page"`
+	TotalPage     int       `json:"totalPages"`
+	TotalMessages int       `json:"totalMessages"`
+	HasNextPage   bool      `json:"hasNextPage"`
 }
 
 // CreateMessage create a new message with the provided string as jsonBody
 func (c *RestClient) CreateMessage(jsonBody []byte) (*string, error) {
+	fmt.Println(string(jsonBody))
 	req, err := http.NewRequest("POST", c.MessagesResourceURI, bytes.NewBuffer(jsonBody))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := c.HTTPClient.Do(req)
@@ -122,8 +125,8 @@ func (c *RestClient) UpdateMessage(msgID string, jsonBody []byte) (int, error) {
 }
 
 // ListMessages returns all the messages stored in the server
-func (c *RestClient) ListMessages() (*ListMessages, error) {
-	req, err := http.NewRequest("GET", c.MessagesResourceURI, nil)
+func (c *RestClient) ListMessages(resourceURI *string) (*ListMessages, error) {
+	req, err := http.NewRequest("GET", *resourceURI, nil)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
@@ -139,4 +142,15 @@ func (c *RestClient) ListMessages() (*ListMessages, error) {
 	msgs := &ListMessages{}
 	json.Unmarshal(body, msgs)
 	return msgs, nil
+}
+
+// ListMessagesWithAllFilter returns all the messages stored in the server
+func (c *RestClient) ListMessagesWithAllFilter(page, limit int, palindrome *string) (*ListMessages, error) {
+	uri := fmt.Sprintf("%s?page=%d&limit=%d", c.MessagesResourceURI, page, limit)
+
+	if *palindrome != "" {
+		uri = uri + "&palindrome=" + *palindrome
+	}
+	fmt.Println(uri)
+	return c.ListMessages(&uri)
 }
