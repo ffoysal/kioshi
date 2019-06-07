@@ -16,7 +16,7 @@ The details api documentation would be found at the endpoint `<uri>/docs`
 
 The api is implemented using NodeJS, ExpressJS, MongoDB. The high level architecture of the app is as follows
 
-![alt text](diagram/app.jpg, "architecture")
+![alt text](diagram/app.jpg)
 
 # Deployments
 
