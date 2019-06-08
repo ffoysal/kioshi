@@ -1,5 +1,8 @@
+/**
+ * Define all the routes and operations for /messages
+ */
 
-const messageController = require('../controllers/messageController.js');
+const messageController = require('../controllers/messageController');
 
 module.exports.init = (apiRoutes, manageResponse) => {
 

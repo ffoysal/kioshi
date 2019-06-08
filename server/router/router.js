@@ -1,5 +1,9 @@
+/**
+ * Define routers to be used by expressjs
+ */
+
 const express = require('express');
-const messageRouter = require('./messageRouter.js');
+const messageRouter = require('./messageRouter');
 
 let manageResponse = (err, status, responseBody, res, next) => {
   if (err) {

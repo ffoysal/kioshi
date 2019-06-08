@@ -5,17 +5,15 @@ const messageService = require('../services/messageService');
 // Create a message
 exports.createMessage = (req, res, callback) => {
 
-  if (!(Object.keys(req.body) &&
-    Object.keys(req.body).length === 1 &&
-    req.body.message &&
-    messageService.isMsgValid(req.body.message)
-  )) {
+  // do initial validation of the body
+  if (!isValidReqBody(req)) {
     return callback({
       status: 400,
       message: 'invalid message body'
     });
   }
 
+  // define the Message model to save into db
   let message = new Message({
     _id: uuidv4().split('-').join(''),
     message: req.body.message,
@@ -78,9 +76,7 @@ exports.deleteMessage = (req, res, callback) => {
 
 // update a message with the specified id
 exports.updateMessage = (req, res, callback) => {
-  if (!(Object.keys(req.body) &&
-    Object.keys(req.body).length === 1 &&
-    messageService.isMsgValid(req.body.message))) {
+  if (!isValidReqBody(req)) {
     return callback({
       status: 400,
       message: 'invalid message body'
@@ -156,4 +152,13 @@ exports.listMessages = (req, res, callback) => {
     };
     return callback(null, 200, msg);
   });
+};
+
+
+// verifies if req body is valid or not
+let isValidReqBody = function (req) {
+  return Object.keys(req.body) &&
+    Object.keys(req.body).length === 1 &&
+    req.body.message &&
+    messageService.isMsgValid(req.body.message);
 };

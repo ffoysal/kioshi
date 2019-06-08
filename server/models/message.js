@@ -1,3 +1,8 @@
+/**
+ * Define the schema of the Message object that will be stored into DB
+ */
+
+
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
@@ -37,6 +42,7 @@ const MessageSchema = new Schema(
 
 );
 
+// runs before save to update the lastupdated field automaticallly
 MessageSchema.pre('save', function (next) {
   this.lastUpdatedAt = Date.now();
   next();
