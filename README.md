@@ -26,6 +26,8 @@ Kioshi is a simple REST api which has only one purpose is to manage messages. Th
 
 The details api documentation would be found at the endpoint `<uri>/docs`
 
+**CircleCi has been integrated and there is a `test` stage and code coverage report stored as artifact.**
+
 ## Architecture
 
 The api is implemented using NodeJS, ExpressJS, MongoDB. The high level architecture of the app is as follows
