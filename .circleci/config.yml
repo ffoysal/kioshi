@@ -53,7 +53,7 @@ jobs: # a collection of steps
       - run:
           name: cross compile
           command: |
-            gox -os="linux darwin windows" -arch="amd64" -output="dist/kioshi_{{.OS}}_{{.Arch}}"
+            gox -os="linux darwin windows" -arch="amd64" -output="dist/mms-cli_{{.OS}}_{{.Arch}}"
             cd dist/ && gzip *
       - add_ssh_keys
       - run:
