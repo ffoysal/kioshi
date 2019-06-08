@@ -9,7 +9,7 @@
 - [Build Container & Run](#Build-Container)
 - [Run using docker-compose](#Run-using-docker-compose)
 - [Cloud Deployment](#Cloud-Deployments)
-  - [AWS Deployment (kops)](#kubernetes-(kops))
+  - [Kubernetes Deployment (kops)](#kubernetes-(kops))
   - [AWS Deployment (terraform)](#AWS-Terraform)
 - [CLI for API](#CLI-for-Api)
 
