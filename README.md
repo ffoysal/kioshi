@@ -5,9 +5,12 @@
 - [Overview](#Overview)
 - [Api Architecture](#Architecture)
 - [Run app locally](#Run-locally)
+- [Run Test](#Run-Test)
+- [Build Container & Run](#Build-Container)
 - [Run using docker-compose](#Run-using-docker-compose)
 - [AWS Deployment (kops)](#kubernetes-(kops))
 - [AWS Deployment (terraform)](#AWS-Terraform)
+- [CLI for API](#CLI-for-Api)
 
 # Overview
 
@@ -22,6 +25,8 @@ Kioshi is a simple REST api which has only one purpose is to manage messages. Th
 | List messages | GET | 200 | response has list of messages in the body|
 
 The details api documentation would be found at the endpoint `<uri>/docs`
+
+**CircleCi has been integrated and there is a `test` stage and code coverage report stored as artifact.**
 
 ## Architecture
 
@@ -72,12 +77,58 @@ For api docs http://localhost:3000/docs
 
 For api operation http://localhost:3000/messages
 
+## Run Test
+
+The test are written in `mocha`, `chai` and `supertest`  framework. During test app does not need real mongo db server instead it uses `mongodb-memory-server`.
+
+To run the test 
+
+```
+git clone https://github.com/ffoysal/kioshi.git
+cd kioshi/server
+```
+```
+npm test
+```
+It will generate a mocha test report in console and generate a code coverage report using `nyc` framework.
+
+## Build Container
+
+In order to deploy in the cloud easily a `Dockerfile` is provided to make docker container.
+
+To build the container
+```
+git clone https://github.com/ffoysal/kioshi.git
+cd kioshi
+```
+```
+docker build . -t kioshi
+```
+
+It will create a docker image named `kioshi`. This container can be run by passing mongo db url as environment like this
+
+```
+docker run --rm -p 3000:3000 -e MONGODB_URI=mongodb://<DB_HOST>:27017/mms-db --name kioshi_app kioshi
+```
+
+_Note: change `DB_HOST` for your db._ DONT PUT `localhost` if your db is running in localhost. Instead use actual IP of the localhost as the app is running inside container.
+
+
+Access the app
+
+documentation: http://localhost:3000/docs
+
+health check: http://localhost:3000/health
+
+api: http://localhost:3000/messages
+
+
 ## Run using docker-compose
 
 pre-requisites are
 
-- `docker` must be installed
-- `docker-compose` must be installed
+- [docker](https://docs.docker.com/install/) must be installed
+- [docker-compose](https://docs.docker.com/compose/install/) must be installed
 
 Follow the steps in order
 
@@ -214,11 +265,11 @@ The `frontend` service can be accessed by this url `<uri>.us-east-1.elb.amazonaw
 
 The supported paths by the app are 
 
-`<uri>.us-east-1.elb.amazonaws.com/health`
+health check: `<uri>.us-east-1.elb.amazonaws.com/health`
 
-`<uri>.us-east-1.elb.amazonaws.com/docs`
+api documentation: `<uri>.us-east-1.elb.amazonaws.com/docs`
 
-`<uri>.us-east-1.elb.amazonaws.com/messages`
+api: `<uri>.us-east-1.elb.amazonaws.com/messages`
 
 
 All the supported operations and examples are provided in `/docs` path.
@@ -276,16 +327,59 @@ go to http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
 It will return `503` as because MongoDB is running on EC2 instance which has not been ready state yet. Detail logs can be found at cloudwatch log group `mms-kio-ecs`. Wait 2/3 minutes the app will be ready.
 
 
-http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
+health check: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
 
-http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/docs
+api documentation: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/docs
 
-http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/messages
+api: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/messages
 
 _Note: for every deployment this number `124578` in the URL is different_
 
-For REST api best client tool would be [postman](https://www.getpostman.com/) or `curl` or use [mms-cli](#CLI-for-Kioshi-Api)
+To test REST api client tools would be [postman](https://www.getpostman.com/) or `curl` or use [mms-cli](#CLI-for-Api)
 
 
-## CLI for Kioshi Api
+## CLI for Api
+
+A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and the code is located [here](./mms-cli). There is a executable added for `ubuntu`. It is [here](./mms-cli/mms-cli).
+
+The CLI tool help is self explenetory. 
+
+After downloading the executbale, just run `./mms-cli` first time. It will show output like this
+
+```
+Please export the environment variable MMS_URI (.i.e. export MMS_URI=http://localhost:3000)
+It is the URI where the REST api server is running
+```
+export the environement variable 
+```
+export MMS_URI=http://localhost:300
+```
+assuming the api is running on local host.
+then run 
+```
+./mms-cli
+```
+The output will be like this
+```
+
+	mms-cli is a client tool for rest api Message Management Service (mms).
+	You can create, get, delete, update, list messages.
+
+Usage:
+  mms-cli [command]
+
+Available Commands:
+  create      Create a message
+  delete      Delete a message
+  get         Get a message details
+  help        Help about any command
+  list        List all the message
+  update      Update a message
+
+Flags:
+  -h, --help   help for mms-cli
+
+Use "mms-cli [command] --help" for more information about a command.
+```
+
 
