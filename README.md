@@ -340,4 +340,46 @@ To test REST api client tools would be [postman](https://www.getpostman.com/) or
 
 ## CLI for Api
 
-A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and is located [here](./mms-cli). There is a executable added for `ubuntu`. It is [here](./mms-cli/mms-cli)
+A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and the code is located [here](./mms-cli). There is a executable added for `ubuntu`. It is [here](./mms-cli/mms-cli).
+
+The CLI tool help is self explenetory. 
+
+After downloading the executbale, just run `./mms-cli` first time. It will show output like this
+
+```
+Please export the environment variable MMS_URI (.i.e. export MMS_URI=http://localhost:3000)
+It is the URI where the REST api server is running
+```
+export the environement variable 
+```
+export MMS_URI=http://localhost:300
+```
+assuming the api is running on local host.
+then run 
+```
+./mms-cli
+```
+The output will be like this
+```
+
+	mms-cli is a client tool for rest api Message Management Service (mms).
+	You can create, get, delete, update, list messages.
+
+Usage:
+  mms-cli [command]
+
+Available Commands:
+  create      Create a message
+  delete      Delete a message
+  get         Get a message details
+  help        Help about any command
+  list        List all the message
+  update      Update a message
+
+Flags:
+  -h, --help   help for mms-cli
+
+Use "mms-cli [command] --help" for more information about a command.
+```
+
+

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-
 	"github.com/spf13/cobra"
 )
 
@@ -18,8 +17,7 @@ var RootCmd = &cobra.Command{
 	Short: "mms-cli is a client tool for rest api Message Management Service (mms)",
 	Long: `
 	mms-cli is a client tool for rest api Message Management Service (mms).
-	You can create, get, delete, update, list messages. Set env MMS_URI. 
-	example of MMS_URI=http://localhost:3000/
+	You can create, get, delete, update, list messages.
 	`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
