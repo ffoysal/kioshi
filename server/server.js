@@ -46,6 +46,18 @@ app.get('/', function (req, res) {
 // start the app
 app.listen(config.serverPort);
 
+// Enable CORS
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials'
+  );
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 console.log('Server started at the port: ' + config.serverPort);
 router(app);
 
