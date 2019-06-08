@@ -337,14 +337,34 @@ _Note: for every deployment this number `124578` in the URL is different_
 
 To test REST api client tools would be [postman](https://www.getpostman.com/) or `curl` or use [mms-cli](#CLI-for-Api)
 
-
 ## CLI for Api
 
-A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and the code is located [here](./mms-cli). There is a executable added for `ubuntu`. It is [here](./mms-cli/mms-cli).
+A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and the code is located [here](./mms-cli).
 
-The CLI tool help is self explenetory. 
+Download the latest release of cli for your OS from [here](https://github.com/ffoysal/kioshi/releases)
 
-After downloading the executbale, just run `./mms-cli` first time. It will show output like this
+
+### Example CLI Run in Ubuntu
+
+Download package for linux and extract it. There is an executable file `mms-cli_linux_amd64`
+
+For easy to use rename file 
+```
+mv mms-cli_linux_amd64 mms-cli
+```
+Make the file executable
+
+```
+chmod +x mms-cli
+```
+Move the file to `/usr/local/bin`
+```
+mv mms-cli /usr/local/bin
+```
+
+The CLI tool help is self explenetory.
+
+`mms-cli` try to find api server from the environment variable `MMS_URI`. So running it without setting environment variable will show the output
 
 ```
 Please export the environment variable MMS_URI (.i.e. export MMS_URI=http://localhost:3000)
@@ -357,7 +377,7 @@ export MMS_URI=http://localhost:300
 assuming the api is running on local host.
 then run 
 ```
-./mms-cli
+mms-cli
 ```
 The output will be like this
 ```
@@ -381,5 +401,3 @@ Flags:
 
 Use "mms-cli [command] --help" for more information about a command.
 ```
-
-
