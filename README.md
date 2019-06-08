@@ -8,8 +8,9 @@
 - [Run Test](#Run-Test)
 - [Build Container & Run](#Build-Container)
 - [Run using docker-compose](#Run-using-docker-compose)
-- [AWS Deployment (kops)](#kubernetes-(kops))
-- [AWS Deployment (terraform)](#AWS-Terraform)
+- [Cloud Deployment](#Cloud-Deployments)
+  - [AWS Deployment (kops)](#kubernetes-(kops))
+  - [AWS Deployment (terraform)](#AWS-Terraform)
 - [CLI for API](#CLI-for-Api)
 
 # Overview
@@ -122,7 +123,6 @@ health check: http://localhost:3000/health
 
 api: http://localhost:3000/messages
 
-
 ## Run using docker-compose
 
 pre-requisites are
@@ -152,6 +152,8 @@ For api docs http://localhost:3000/docs
 For api operation http://localhost:3000/messages
 
 # Cloud Deployments
+
+To make the cloud deployment easier the build system push the latest application docker image to docker hub. Have a look at the [Docker Registry](https://hub.docker.com/r/ffoysal/kioshi). Kubernetes or AWS ECS can easily pull the docker images from that pulic registry.
 
 ## kubernetes (kops)
 
