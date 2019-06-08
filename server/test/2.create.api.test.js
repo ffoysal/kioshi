@@ -34,6 +34,14 @@ describe('POST /messages [Create a Messages]', () => {
       })
       .expect(400, done());
   });
+  it('should return 400 for message key not in body', (done) => {
+    request
+      .post('/messages')
+      .send({
+        msg: 'kayak'
+      })
+      .expect(400, done());
+  });
   it('should return 400 for extra key in body', (done) => {
     request
       .post('/messages')
