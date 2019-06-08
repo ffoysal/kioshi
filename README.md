@@ -340,4 +340,4 @@ To test REST api client tools would be [postman](https://www.getpostman.com/) or
 
 ## CLI for Api
 
-A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and is located [here](./mms-cli)
+A custom cli (`mms-cli`) tool has been implemented for this REST api. The `mms-cli` suppport operations (create, get, update, delete, list) and make api calls to the REST server. The cli tool is implemented using `go` and is located [here](./mms-cli). There is a executable added for `ubuntu`. It is [here](./mms-cli/mms-cli)
