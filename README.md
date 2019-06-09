@@ -19,11 +19,11 @@ Kioshi is a simple REST api which has only one purpose is to manage messages. Th
 
 | Operations | HTTP Verb | HTTP Returned Code | Comments |
 | ---------- | --------- | ------------------ | -------- |
-| Create message | POST | 201 | request body `{"message":"racecar"}`, response body null, response header `Location:/messages/124fghk` |
-| Get a message details | GET | 200 | response body will have message details |
-| Update a message | PATCH | 204 | no response body |
-| Delete a message | DELETE | 204 | no response body|
-| List messages | GET | 200 | response has list of messages in the body|
+| Create message | POST `/messages` | 201 | request body `{"message":"racecar"}`, response body null, response header `Location:/messages/124fghk` |
+| Get a message details | GET `/messages/124fghk` | 200 | response body will have message details |
+| Update a message | PATCH `/messages/124fghk` | 204 | request body `{"message":"kayak"}`, no response body |
+| Delete a message | DELETE `/messages/124fghk` | 204 | no response body|
+| List messages | GET `/messages` | 200 | response has list of messages in the body|
 
 The details api documentation would be found at the endpoint `<uri>/docs`
 
@@ -46,7 +46,8 @@ To run the app locally, pre-requisites
 
 - Install `NodeJS`
 - Install `npm`
-- Install `MongoDB` or use mongo db docker container
+- Install `MongoDB` or use mongo db docker container `docker run -d -p 27017:27017 --name mongodb mongo:4.0.4`
+
 
 
 Once the pre-requisites are done, follow the steps in order
