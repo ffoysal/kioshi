@@ -158,7 +158,7 @@ To make the cloud deployment easier the build system push the latest application
 
 ## Kubernetes with kops
 
-Assuming [kops](https://github.com/kubernetes/kops) has been installed on your development machine as well as `aws-cli` and `kubectl`.
+We will use `kops` to deploy kubernetes cluster in **AWS**. Assuming [kops](https://github.com/kubernetes/kops) has been installed on your development machine as well as `aws-cli` and `kubectl`.
 
 ### Create an S3 bucket
 
@@ -175,7 +175,7 @@ _This bucket name may not be available please replace your bucket name here._
 ### Set environement vriables for easy life
 
 ```
-export NAME=kioshi.k8s.local
+export NAME=kioshi.com.k8s.local
 export KOPS_STATE_STORE=s3://kioshi-k8s-store
 ```
 
@@ -205,13 +205,13 @@ Cluster is starting.  It should be ready in a few minutes.
 
 ### Verify Cluster
 
-Validate if the cluster creation is done or not using the command
+Cluster creation will take couple of minitues. Validate if the cluster creation is done using the command
 ```
 kops validate cluster
 ```
 The above command will produce all the node info as well as
 ```
-Your cluster kioshi.k8s.local is ready
+Your cluster kioshi.com.k8s.local is ready
 ```
 
 ### Check all nodes are ready
@@ -241,7 +241,7 @@ cd kioshi/kubernetes
 kubectl apply -f .
 ```
 
-Verify if pods are in running state, if not pelase check and wait
+Verify if pods are in running state, if not pelase wait and check again
 ```
 kubectl get pods
 ```
@@ -260,11 +260,11 @@ kubectl get service
 ```
 output will be
 ```
-frontend     LoadBalancer   100.71.140.141   <uri>.us-east-1.elb.amazonaws.com   80:31619/TCP   3h
+api     LoadBalancer   100.71.140.141   <uri>.us-east-1.elb.amazonaws.com   80:31619/TCP   3h
 kubernetes   ClusterIP      100.64.0.1       <none>                                                                    443/TCP        3h
 mongo        ClusterIP      100.68.179.157   <none>                                                                    27017/TCP      1h
 ```
-The `frontend` service can be accessed by this url `<uri>.us-east-1.elb.amazonaws.com`
+The `api` service can be accessed by this url `<uri>.us-east-1.elb.amazonaws.com`
 
 The supported paths by the app are 
 
