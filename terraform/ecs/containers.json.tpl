@@ -2,8 +2,8 @@
   {
     "name": "kioshi",
     "image": "ffoysal/kioshi:1.1.0",
-    "cpu": 1024,
-    "memory": 2048,
+    "cpu": ${container_cpu},
+    "memory": ${container_memory},
     "networkMode": "awsvpc",
     "environment": [
         {

@@ -6,6 +6,7 @@
 - [Api Architecture](#Architecture)
 - [Run app locally](#Run-locally)
 - [Run Test](#Run-Test)
+- [Sanity Test](#Sanity-for-Any-Deployment)
 - [Build Container & Run](#Build-Container)
 - [Run using docker-compose](#Run-using-docker-compose)
 - [Cloud Deployment](#Cloud-Deployments)
@@ -19,11 +20,11 @@ Kioshi is a simple REST api which has only one purpose is to manage messages. Th
 
 | Operations | HTTP Verb | HTTP Returned Code | Comments |
 | ---------- | --------- | ------------------ | -------- |
-| Create message | POST | 201 | request body `{"message":"racecar"}`, response body null, response header `Location:/messages/124fghk` |
-| Get a message details | GET | 200 | response body will have message details |
-| Update a message | PATCH | 204 | no response body |
-| Delete a message | DELETE | 204 | no response body|
-| List messages | GET | 200 | response has list of messages in the body|
+| Create message | POST `/messages` | 201 | request body `{"message":"racecar"}`, response body null, response header `Location:/messages/124fghk` |
+| Get a message details | GET `/messages/124fghk` | 200 | response body will have message details |
+| Update a message | PATCH `/messages/124fghk` | 204 | request body `{"message":"kayak"}`, no response body |
+| Delete a message | DELETE `/messages/124fghk` | 204 | no response body|
+| List messages | GET `/messages` | 200 | response has list of messages in the body|
 
 The details api documentation would be found at the endpoint `<uri>/docs`
 
@@ -46,7 +47,8 @@ To run the app locally, pre-requisites
 
 - Install `NodeJS`
 - Install `npm`
-- Install `MongoDB` or use mongo db docker container
+- Install `MongoDB` or use mongo db docker container `docker run -d -p 27017:27017 --name mongodb mongo:4.0.4`
+
 
 
 Once the pre-requisites are done, follow the steps in order
@@ -80,7 +82,7 @@ For api operation http://localhost:3000/messages
 
 ## Run Test
 
-The test are written in `mocha`, `chai` and `supertest`  framework. During test app does not need real mongo db server instead it uses `mongodb-memory-server`.
+The test are written using `mocha`, `chai` and `supertest`  framework. During test app does not need real mongo db server instead it uses `mongodb-memory-server`.
 
 To run the test 
 
@@ -92,6 +94,10 @@ cd kioshi/server
 npm test
 ```
 It will generate a mocha test report in console and generate a code coverage report using `nyc` framework.
+
+## Sanity for Any Deployment
+
+To quickly verify if a deployment has done successfully a file called `sanity.js` is provided into `server` folder. After finishing the deployment change the `baseURL` variable in `sanity.js` file and run `mocha sanity.js` it will verify all the api operations. If `mocha` command not found, install it `npm install mocha -g`
 
 ## Build Container
 
@@ -157,7 +163,7 @@ To make the cloud deployment easier the build system push the latest application
 
 ## Kubernetes with kops
 
-Assuming [kops](https://github.com/kubernetes/kops) has been installed on your development machine as well as `aws-cli` and `kubectl`.
+We will use `kops` to deploy kubernetes cluster in **AWS**. Assuming [kops](https://github.com/kubernetes/kops) has been installed on your development machine as well as `aws-cli` and `kubectl`.
 
 ### Create an S3 bucket
 
@@ -174,7 +180,7 @@ _This bucket name may not be available please replace your bucket name here._
 ### Set environement vriables for easy life
 
 ```
-export NAME=kioshi.k8s.local
+export NAME=kioshi.com.k8s.local
 export KOPS_STATE_STORE=s3://kioshi-k8s-store
 ```
 
@@ -204,13 +210,13 @@ Cluster is starting.  It should be ready in a few minutes.
 
 ### Verify Cluster
 
-Validate if the cluster creation is done or not using the command
+Cluster creation will take couple of minitues. Validate if the cluster creation is done using the command
 ```
 kops validate cluster
 ```
 The above command will produce all the node info as well as
 ```
-Your cluster kioshi.k8s.local is ready
+Your cluster kioshi.com.k8s.local is ready
 ```
 
 ### Check all nodes are ready
@@ -240,7 +246,7 @@ cd kioshi/kubernetes
 kubectl apply -f .
 ```
 
-Verify if pods are in running state, if not pelase check and wait
+Verify if pods are in running state, if not pelase wait and check again
 ```
 kubectl get pods
 ```
@@ -259,11 +265,11 @@ kubectl get service
 ```
 output will be
 ```
-frontend     LoadBalancer   100.71.140.141   <uri>.us-east-1.elb.amazonaws.com   80:31619/TCP   3h
+api     LoadBalancer   100.71.140.141   <uri>.us-east-1.elb.amazonaws.com   80:31619/TCP   3h
 kubernetes   ClusterIP      100.64.0.1       <none>                                                                    443/TCP        3h
 mongo        ClusterIP      100.68.179.157   <none>                                                                    27017/TCP      1h
 ```
-The `frontend` service can be accessed by this url `<uri>.us-east-1.elb.amazonaws.com`
+The `api` service can be accessed by this url `<uri>.us-east-1.elb.amazonaws.com`
 
 The supported paths by the app are 
 
@@ -279,23 +285,24 @@ All the supported operations and examples are provided in `/docs` path.
 The api endpoint are in the path `/messages`
 
 To verify the apis please use `curl` or `postman`
-_Note `try out` button in swagger ui will not work for this deployment._
+
+_Note: `try out` button in swagger ui will not work for this deployment._
 
 ### Delete Cluster
 
 To cleanup, delete the kubernetes cluster
 ```
-kops delete cluster --name=kioshi.k8s.local
+kops delete cluster --name=${NAME} --yes
 ```
 
 ## AWS Terraform
 
-The high level architecture for AWS deployment is below. MongoDB container is running in EC2 instance and app container is running ECS Fargate.
+The high level architecture for AWS deployment is below. MongoDB container is running in EC2 instance and app container is running in ECS Fargate.
 ![alt text](diagram/aws.jpg)
 
-_Note: for simplicity all security groups, target group, ECS service not shown in the diagram_
+_Note: for simplicity all security groups, target group, ECS service are not shown in the diagram_
 
-The `terraform` code is written in the version of `0.11.7`. Please download the [terraform 0.11.7](https://releases.hashicorp.com/terraform/0.11.7/) for your OS. Assumming the AWS credentials is stored in `$HOME/.aws/credentials` with default profile. And the infrastructure will be created in `us-east-1` region.
+The `terraform` code is written in the version of `0.11.7`. Please download the [terraform 0.11.7](https://releases.hashicorp.com/terraform/0.11.7/) for your OS. Assumming the AWS credentials are stored in `$HOME/.aws/credentials` with default profile. And the infrastructure will be created in `us-east-1` region.
 
 Follow the steps below in order to deploy the infrastructure in AWS.
 ```
@@ -313,7 +320,12 @@ _Note: It will load all the terraform moudles._
 ```
 terraform plan
 ````
-_it will show how many resources and what resources will be created._
+it will show how many resources and what resources will be created. Currently 32 resources will be created. And the output for the above command will have something like this
+
+```
+Plan: 32 to add, 0 to change, 0 to destroy.
+```
+
 ```
 terraform apply -auto-approve
 ```
@@ -325,6 +337,9 @@ Outputs:
 
 alb = mms-kio-alb-124578.us-east-1.elb.amazonaws.com
 ```
+
+_Note: for every deployment this number `124578` in the URL is different_
+
 go to http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
 It will return `503` as because MongoDB is running on EC2 instance which has not been ready state yet. Detail logs can be found at cloudwatch log group `mms-kio-ecs`. Wait 2/3 minutes the app will be ready.
 
@@ -335,9 +350,15 @@ api documentation: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/docs
 
 api: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/messages
 
-_Note: for every deployment this number `124578` in the URL is different_
-
 To test REST api client tools would be [postman](https://www.getpostman.com/) or `curl` or use [mms-cli](#CLI-for-Api)
+
+To cleanup the resources
+
+```
+terraform destroy -auto-approve
+```
+
+It will take couple of miniutes to finish. It will delete all the resources created for the deployemnt.
 
 ## CLI for Api
 
@@ -403,3 +424,7 @@ Flags:
 
 Use "mms-cli [command] --help" for more information about a command.
 ```
+
+# Issues/Comments/Suggestions
+
+if you find and issues or have any question, comments, suggestions please create an issue.
