@@ -22,7 +22,10 @@ paths:
         - in: "body"
           name: "body"
           description: |
-            A JSON object having only one key called "message"
+            A JSON object having only one key called "message".
+            Only alphabetical characters are allowed for value. 
+            no number, no special characters are allowed.
+            The minimum length should be 3 characters long.
           required: true
           schema:
             $ref: "#/definitions/MessagePostBody"
