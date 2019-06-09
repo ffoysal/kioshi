@@ -39,7 +39,7 @@ The api is implemented using NodeJS, ExpressJS, MongoDB. The high level architec
 - **Router**: It is a expressjs component that routes to various controller method based on request path.
 - **Controller**: It is responsible to call proper service method and model based on the request
 - **Service**: All the business logics are implemented in here.
-- **Model**: Manage model state with the database.
+- **Model**: Represents data model and handle database operations.
 
 ## Run locally
 
