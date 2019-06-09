@@ -6,6 +6,7 @@
 - [Api Architecture](#Architecture)
 - [Run app locally](#Run-locally)
 - [Run Test](#Run-Test)
+- [Sanity Test](#Sanity-for-Any-Deployment)
 - [Build Container & Run](#Build-Container)
 - [Run using docker-compose](#Run-using-docker-compose)
 - [Cloud Deployment](#Cloud-Deployments)
@@ -81,7 +82,7 @@ For api operation http://localhost:3000/messages
 
 ## Run Test
 
-The test are written in `mocha`, `chai` and `supertest`  framework. During test app does not need real mongo db server instead it uses `mongodb-memory-server`.
+The test are written using `mocha`, `chai` and `supertest`  framework. During test app does not need real mongo db server instead it uses `mongodb-memory-server`.
 
 To run the test 
 
@@ -93,6 +94,10 @@ cd kioshi/server
 npm test
 ```
 It will generate a mocha test report in console and generate a code coverage report using `nyc` framework.
+
+## Sanity for Any Deployment
+
+To quickly verify if a deployment has done successfully a file called `sanity.js` is provided into `server` folder. After finishing the deployment change the `baseURL` variable in `sanity.js` file and run `mocha sanity.js` it will verify all the api operations. If `mocha` command not found, install it `npm install mocha -g`
 
 ## Build Container
 
@@ -292,12 +297,12 @@ kops delete cluster --name=${NAME} --yes
 
 ## AWS Terraform
 
-The high level architecture for AWS deployment is below. MongoDB container is running in EC2 instance and app container is running ECS Fargate.
+The high level architecture for AWS deployment is below. MongoDB container is running in EC2 instance and app container is running in ECS Fargate.
 ![alt text](diagram/aws.jpg)
 
-_Note: for simplicity all security groups, target group, ECS service not shown in the diagram_
+_Note: for simplicity all security groups, target group, ECS service are not shown in the diagram_
 
-The `terraform` code is written in the version of `0.11.7`. Please download the [terraform 0.11.7](https://releases.hashicorp.com/terraform/0.11.7/) for your OS. Assumming the AWS credentials is stored in `$HOME/.aws/credentials` with default profile. And the infrastructure will be created in `us-east-1` region.
+The `terraform` code is written in the version of `0.11.7`. Please download the [terraform 0.11.7](https://releases.hashicorp.com/terraform/0.11.7/) for your OS. Assumming the AWS credentials are stored in `$HOME/.aws/credentials` with default profile. And the infrastructure will be created in `us-east-1` region.
 
 Follow the steps below in order to deploy the infrastructure in AWS.
 ```
@@ -315,7 +320,12 @@ _Note: It will load all the terraform moudles._
 ```
 terraform plan
 ````
-_it will show how many resources and what resources will be created._
+it will show how many resources and what resources will be created. Currently 32 resources will be created. And the output for the above command will have something like this
+
+```
+Plan: 32 to add, 0 to change, 0 to destroy.
+```
+
 ```
 terraform apply -auto-approve
 ```
@@ -327,6 +337,9 @@ Outputs:
 
 alb = mms-kio-alb-124578.us-east-1.elb.amazonaws.com
 ```
+
+_Note: for every deployment this number `124578` in the URL is different_
+
 go to http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/health
 It will return `503` as because MongoDB is running on EC2 instance which has not been ready state yet. Detail logs can be found at cloudwatch log group `mms-kio-ecs`. Wait 2/3 minutes the app will be ready.
 
@@ -337,9 +350,15 @@ api documentation: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/docs
 
 api: http://mms-kio-alb-124578.us-east-1.elb.amazonaws.com/messages
 
-_Note: for every deployment this number `124578` in the URL is different_
-
 To test REST api client tools would be [postman](https://www.getpostman.com/) or `curl` or use [mms-cli](#CLI-for-Api)
+
+To cleanup the resources
+
+```
+terraform destroy -auto-approve
+```
+
+It will take couple of miniutes to finish. It will delete all the resources created for the deployemnt.
 
 ## CLI for Api
 
@@ -405,3 +424,7 @@ Flags:
 
 Use "mms-cli [command] --help" for more information about a command.
 ```
+
+# Issues/Comments/Suggestions
+
+if you find and issues or have any question, comments, suggestions please create an issue.
