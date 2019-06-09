@@ -9,7 +9,7 @@
 - [Build Container & Run](#Build-Container)
 - [Run using docker-compose](#Run-using-docker-compose)
 - [Cloud Deployment](#Cloud-Deployments)
-  - [Kubernetes Deployment (kops)](#kubernetes-(kops))
+  - [Kubernetes Deployment (kops)](#Kubernetes-with-kops)
   - [AWS Deployment (terraform)](#AWS-Terraform)
 - [CLI for API](#CLI-for-Api)
 
@@ -155,7 +155,7 @@ For api operation http://localhost:3000/messages
 
 To make the cloud deployment easier the build system push the latest application docker image to docker hub. Have a look at the [Docker Registry](https://hub.docker.com/r/ffoysal/kioshi). Kubernetes or AWS ECS can easily pull the docker images from that pulic registry.
 
-## kubernetes (kops)
+## Kubernetes with kops
 
 Assuming [kops](https://github.com/kubernetes/kops) has been installed on your development machine as well as `aws-cli` and `kubectl`.
 
