@@ -280,13 +280,14 @@ All the supported operations and examples are provided in `/docs` path.
 The api endpoint are in the path `/messages`
 
 To verify the apis please use `curl` or `postman`
-_Note `try out` button in swagger ui will not work for this deployment._
+
+_Note: `try out` button in swagger ui will not work for this deployment._
 
 ### Delete Cluster
 
 To cleanup, delete the kubernetes cluster
 ```
-kops delete cluster --name=kioshi.k8s.local
+kops delete cluster --name=${NAME} --yes
 ```
 
 ## AWS Terraform

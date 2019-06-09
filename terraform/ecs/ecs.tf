@@ -6,10 +6,12 @@ data "template_file" "container_template" {
   template = "${file("${path.module}/containers.json.tpl")}"
 
   vars {
-    aws_region     = "${var.aws_region}"
-    log_group_name = "${aws_cloudwatch_log_group.app_log_group.name}"
-    db_ip          = "${var.db_ip}"
-    swagger_uri    = "${aws_alb.main.dns_name}"
+    aws_region       = "${var.aws_region}"
+    log_group_name   = "${aws_cloudwatch_log_group.app_log_group.name}"
+    db_ip            = "${var.db_ip}"
+    swagger_uri      = "${aws_alb.main.dns_name}"
+    container_cpu    = "${var.container_cpu}"
+    container_memory = "${var.container_memory}"
   }
 }
 
@@ -18,8 +20,8 @@ resource "aws_ecs_task_definition" "kioishi_task" {
   execution_role_arn       = "${var.ecs_task_execution_role}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 2048
+  cpu                      = "${var.container_cpu}"
+  memory                   = "${var.container_memory}"
   container_definitions    = "${data.template_file.container_template.rendered}"
 }
 

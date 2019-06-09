@@ -35,3 +35,11 @@ variable "ecs_task_execution_role" {}
 variable "db_ip" {}
 
 variable "ecs_auto_scale_role_arn" {}
+
+variable "container_cpu" {
+  default = 1024
+}
+
+variable "container_memory" {
+  default = 2048
+}
