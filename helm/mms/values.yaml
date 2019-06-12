@@ -1,0 +1,7 @@
+api:
+  replicas: 2
+  imageTag: "latest"
+db:
+  replicas: 1
+  imageTag: "4.0.4"
+

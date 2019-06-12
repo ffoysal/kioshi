@@ -11,6 +11,7 @@
 - [Run using docker-compose](#Run-using-docker-compose)
 - [Cloud Deployment](#Cloud-Deployments)
   - [Kubernetes Deployment (kops)](#Kubernetes-with-kops)
+  - [Helm Deployment](#Helm-Deployment)
   - [AWS Deployment (terraform)](#AWS-Terraform)
 - [CLI for API](#CLI-for-Api)
 
@@ -189,8 +190,7 @@ export KOPS_STATE_STORE=s3://kioshi-k8s-store
 This will create cluster with micro instances. So production please follow the recomanded size in [here](https://github.com/kubernetes/kops)
 ```
 kops create cluster \
-  --name=kioshi.com.k8s.local \
-  --state=s3://kioshi-k8s-store \
+  --name=${NAME} \
   --zones=us-east-1a \
   --node-count=2 \
   --node-size=t2.micro \
@@ -359,6 +359,47 @@ terraform destroy -auto-approve
 ```
 
 It will take couple of miniutes to finish. It will delete all the resources created for the deployemnt.
+
+## Helm Deployment
+
+Setup kubernetes cluster by following [Kubernetes Deployment (kops)](#Kubernetes-with-kops). Dont use `kubectl` deploy the pods.
+
+Install [Helm](https://helm.sh/docs/using_helm/#installing-helm). I found this is enough for installation
+
+```
+curl -LO https://git.io/get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+
+The above script will take the latest helm and install it.
+
+Since we are using `KOPS` with `AWS` to create kubernetes cluster we need to setup a service account and associate that account with the cluster role `cluster-admin`  in the cluster for `tiller`.
+
+```
+kubectl create serviceaccount -n kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+```
+
+Initialize `helm` with the service account named `tiller`
+
+```
+helm init --service-account tiller
+```
+
+Now follow the steps to deploy this service
+
+```
+git clone https://github.com/ffoysal/kioshi.git
+cd kioshi/helm
+helm install mms/
+```
+
+Follow the on screen message for details after the above command.
+
+To delete the service, first get the helm released name `helm list` then do `helm delete <RELEAE_NAME>`
+
+
 
 ## CLI for Api
 
