@@ -385,6 +385,8 @@ will show output something like this
 Client: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
 Server: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
 ```
+_Note: `Server` will not be shown unless finish `helm init` first._
+
 Since we are using `KOPS` with `AWS` to create kubernetes cluster we need to setup a service account and associate that account with the cluster role `cluster-admin`  in the cluster for `tiller`.
 
 ```
@@ -396,6 +398,11 @@ Initialize `helm` with the service account named `tiller`
 
 ```
 helm init --service-account tiller
+```
+
+Now verify helm again
+```
+helm version
 ```
 
 Now follow the steps to deploy this service
