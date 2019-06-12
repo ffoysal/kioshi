@@ -362,7 +362,7 @@ It will take couple of miniutes to finish. It will delete all the resources crea
 
 ## Helm Deployment
 
-Setup kubernetes cluster by following [Kubernetes Deployment (kops)](#Kubernetes-with-kops). Dont use `kubectl` deploy the pods.
+Setup kubernetes cluster by following [Kubernetes Deployment (kops)](#Kubernetes-with-kops). Dont use `kubectl` to deploy the pods.
 
 Install [Helm](https://helm.sh/docs/using_helm/#installing-helm). I found this is enough for installation
 
@@ -374,6 +374,17 @@ chmod 700 get_helm.sh
 
 The above script will take the latest helm and install it.
 
+verify helm is installed
+```
+helm version
+```
+
+will show output something like this
+
+```
+Client: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
+```
 Since we are using `KOPS` with `AWS` to create kubernetes cluster we need to setup a service account and associate that account with the cluster role `cluster-admin`  in the cluster for `tiller`.
 
 ```
