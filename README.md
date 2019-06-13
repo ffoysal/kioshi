@@ -42,6 +42,8 @@ The api is implemented using NodeJS, ExpressJS, MongoDB. The high level architec
 - **Service**: All the business logics are implemented in here.
 - **Model**: Represents data model and handle database operations.
 
+### In this guide all the commands and implementations are done on ubuntu
+
 ## Run locally
 
 To run the app locally, pre-requisites
