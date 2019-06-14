@@ -1,0 +1,11 @@
+Thank you for installing {{ .Chart.Name }}.
+Your release is named {{ .Release.Name }}.
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get {{ .Release.Name }}
+
+To get the api URL, run:
+  Note: It may take couple of seconds before service is available
+  
+echo $(kubectl get svc {{ .Release.Name }}-api  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
