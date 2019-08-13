@@ -489,4 +489,4 @@ Use "mms-cli [command] --help" for more information about a command.
 
 # Issues/Comments/Suggestions
 
-if you find and issues or have any question, comments, suggestions please create an issue.
+if you find an issues or have any question, comments, suggestions please create an issue.

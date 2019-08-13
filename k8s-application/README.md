@@ -4,7 +4,7 @@ The mms app can be installed as k8s application in GKE.
 
 ## Prerequisits
 
-Follow [this](https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/blob/master/docs/tool-prerequisites.md) doc to install `mpdev` tool.
+Follow [this](https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/blob/master/docs/tool-prerequisites.md) doc to install `mpdev` tool and application crd
 
 make sure to replace this line `gcloud_original_path=(--env "GCLOUD_ORIGINAL_PATH=$(readlink -f ${GCLOUD_CONFIG})")` with this line `gcloud_original_path=(--env "GCLOUD_ORIGINAL_PATH=${GCLOUD_CONFIG}")` in the `mpdev` file.
 
