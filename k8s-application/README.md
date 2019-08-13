@@ -19,9 +19,9 @@ This following files are already in this repo
 
 - [schemal.yaml](schema.yaml)
 - [Dockerfile](Dockerfile)
-- [applicatio.yaml](templates/application)
+- [application.yaml](chart/mms/templates/application.yaml)
 
-**To build the deployer container**
+### To build the deployer container
 
 ```console
 # Set the registry to your project GCR repo.

@@ -14,6 +14,7 @@
   - [Helm Deployment](#Helm-Deployment)
   - [AWS Deployment (terraform)](#AWS-Terraform)
 - [CLI for API](#CLI-for-Api)
+- [K8s-Application](k8s-application/README.md)
 
 # Overview
 
