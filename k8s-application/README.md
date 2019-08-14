@@ -26,7 +26,7 @@ This following files are already in this repo
 ```console
 # Set the registry to your project GCR repo.
 export REGISTRY=gcr.io/$(gcloud config get-value project | tr ':' '/')
-export APP_NAME=wordpress
+export APP_NAME=mms
 
 docker build --tag $REGISTRY/$APP_NAME/deployer .
 ```
